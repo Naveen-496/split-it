@@ -1,101 +1,212 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+
+import { Expense, ExpenseCategory } from "@/types";
+import { useCurrentUser } from "@/hooks/use-user";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AddSplitExpense } from "@/components/create-split";
+import { SelectCategory } from "@/components/select-category";
+import { Button } from "@/components/ui/button";
+
+function formatAmount(amount: number) {
+  return new Intl.NumberFormat().format(amount);
+}
+
+export default function Page() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <main className="max-w-5xl mx-auto p-4 bg-slate-200 ">
+      <h2 className="font-semibold">Main Page</h2>
+    </main>
   );
 }
+
+// export default function App() {
+//   const [categories, setCategories] = useState<ExpenseCategory[]>([]);
+//   const [expenses, setExpenses] = useState<Expense[]>([]);
+//   const [limit, setLimit] = useState(5);
+//   const [type, setType] = useState<"all" | "expense" | "income">("all");
+//   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+//   const [summary, setSummary] = useState({ totalExpense: 0, totalIncome: 0 });
+//   const currentUser = useCurrentUser();
+
+//   const fetchSummary = async () => {};
+
+//   const fetchExpenses = async () => {
+//     const localExpenses = localStorage.getItem("expenses");
+//     const expensesJson = JSON.parse(localExpenses || "[]");
+//     let [income, expense] = [0, 0];
+//     for (const exp of expensesJson) {
+//       console.log(exp);
+//       const amount = exp.splitMembers.find(
+//         (mem) => mem.username === "You"
+//       ).amount;
+//       if (exp.paidBy === currentUser.username) {
+//         income = income + (exp.amount - amount);
+//       } else {
+//         expense += amount;
+//       }
+//     }
+//     if (income - expense > 0) {
+//       income = income - expense;
+//       expense = 0;
+//     } else {
+//       income = 0;
+//       expense = Math.abs(income - expense);
+//     }
+//     setExpenses(expensesJson);
+//     setSummary({ totalExpense: expense, totalIncome: income });
+//   };
+
+//   const fetchCategories = async () => {};
+
+//   useEffect(() => {
+//     fetchExpenses();
+//   }, [limit, type, selectedCategories]);
+
+//   useEffect(() => {
+//     const currentUser = {
+//       username: "Naveen",
+//       mobile: "8860707979",
+//       id: 1,
+//       imageUrl: "ava-one.jpeg",
+//     };
+//     localStorage.setItem("current_user", JSON.stringify(currentUser));
+//     fetchSummary();
+//     fetchCategories();
+//   }, []);
+
+//   const getPaymentDetails = (expense: Expense) => {
+//     const isPaidByCurrentUser = expense.paidBy === currentUser.username;
+//     const amount = expense.splitMembers.find(
+//       (mem) => mem.username === "You"
+//     ).amount;
+//     if (isPaidByCurrentUser) {
+//       const remAmount = expense.amount - amount;
+//       return { amount: remAmount, isPaid: true };
+//     } else {
+//       return { amount, isPaid: false };
+//     }
+//   };
+
+//   return (
+//     <main className="container max-w-4xl mx-auto p-4 jost-regular-400">
+//       <div className="p-4 w-full border rounded mb-4 flex items-center justify-between">
+//         <div className="w-[50%] border-r h-full text-center semibold">
+//           <h2 className="">Will Get</h2>
+//           <div className="text-xl text-green-500 ">
+//             ₹{formatAmount(summary.totalIncome)}
+//           </div>
+//         </div>
+//         <div className="w-[50%] h-full text-center semibold">
+//           <h2 className="">Will Pay</h2>
+//           <div className="text-xl text-red-500">
+//             ₹{formatAmount(summary.totalExpense)}
+//           </div>
+//         </div>
+//       </div>
+//       <div className="flex items-center justify-between">
+//         <div>
+//           <h2 className="font-semibold text-xl">Bills</h2>
+//           <p className="text-slate-400 text-sm">
+//             {/* You had 2 incomes and 23 expenses this month */}
+//           </p>
+//         </div>
+//         <div className="flex items-center gap-2">
+//           <div>
+//             <Select onValueChange={(value) => setType(value as typeof type)}>
+//               <SelectTrigger className="flex items-center gap-3 focus:bg-gray-100 focus:outline-none focus:border-none focus-visible:outline-none">
+//                 <SelectValue placeholder="Type" />
+//               </SelectTrigger>
+//               <SelectContent>
+//                 <SelectItem value="all">All</SelectItem>
+//                 <SelectItem value="expense">Expense</SelectItem>
+//                 <SelectItem value="income">Income</SelectItem>
+//               </SelectContent>
+//             </Select>
+//           </div>
+//           <div>
+//             <div>
+//               <SelectCategory
+//                 categories={categories}
+//                 selectedCategories={selectedCategories}
+//                 onSelectCategories={(selected: number[]) => {
+//                   setSelectedCategories(selected);
+//                 }}
+//               />
+//             </div>
+//           </div>
+//           <div>
+//             <AddSplitExpense onExpenseAdded={fetchExpenses} />
+//           </div>
+//         </div>
+//       </div>
+
+//       <div className="mt-4">
+//         <div className="w-full border-b mb-2"></div>
+
+//         {expenses.length === 0 && (
+//           <div className="text-center text-slate-500 text-sm">
+//             <p>No Expenses found. Please add one</p>
+//           </div>
+//         )}
+//       </div>
+//       <div>
+//         {expenses.map((expense) => {
+//           const { amount, isPaid } = getPaymentDetails(expense);
+//           return (
+//             <div key={expense.description}>
+//               <div className="flex items-center justify-between">
+//                 <div className="flex items-center gap-5 my-4">
+//                   <img
+//                     src={`/icons/${expense.category.imageUrl}`}
+//                     alt="User"
+//                     className="w-6 h-6 rounded-full"
+//                   />
+//                   <div>
+//                     <p className="semibold">{expense.description}</p>
+//                     <p className="text-[10px] medium text-slate-500">
+//                       {expense.paidBy === currentUser.username
+//                         ? "You"
+//                         : expense.paidBy}{" "}
+//                       paid {expense.amount}
+//                     </p>
+//                   </div>
+//                 </div>
+//                 <div
+//                   className={`${
+//                     isPaid ? "text-green-500" : "text-red-500"
+//                   } text-sm text-right`}
+//                 >
+//                   <div>{isPaid ? "You get" : "You pay"}</div>
+//                   <div className="medium">₹{amount}</div>
+//                 </div>
+//               </div>
+
+//               <div className="border-b"></div>
+//             </div>
+//           );
+//         })}
+//       </div>
+//       {expenses.length > 5 && (
+//         <div className="mt-3 flex items-center justify-center">
+//           <Button
+//             variant="outline"
+//             onClick={() => {
+//               setLimit((prev) => prev + 5);
+//             }}
+//           >
+//             Load More
+//           </Button>
+//         </div>
+//       )}
+//       {/* <ChatBot expenseCallback={fetchExpenses} /> */}
+//     </main>
+//   );
+// }
